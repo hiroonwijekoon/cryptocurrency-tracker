@@ -1,13 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Header from "./components/header";
+import Header from "./components/Header";
 import Homepage from "./pages/Homepage";
 import Coinpage from "./pages/Coinpage";
+import { makeStyles } from "@mui/styles";
 
-function App() {
+function App(): JSX.Element {
   return (
     <BrowserRouter>
-      <div>
+      <div className={"app"}>
         <Header />
         <Routes>
           <Route path="/" Component={Homepage} />
