@@ -12,13 +12,13 @@ import {
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import { CoinState } from "../coinContext";
+import { CoinState } from "../CoinContext";
 
 const Header = () => {
   //styling using sx styles instead of css
   const titleStyles = {
     flex: 1,
-    color: "gold",
+    color: "ivory",
     fontFamily: "Montserrat",
     fontWeight: "bold",
     cursor: "pointer",
@@ -30,10 +30,15 @@ const Header = () => {
     marginLeft: 15,
   };
 
+  const containerStyles = {
+    paddingTop: 1,
+    paddingBottom: 1,
+  };
+
   //need this useNavigate function to navigate between pages
   const navigate = useNavigate();
 
-  //setting confid for dark theme
+  //setting config for dark theme
   const darkTheme = createTheme({
     palette: {
       primary: {
@@ -44,27 +49,28 @@ const Header = () => {
   });
 
   //using state to keep track of currency
-  const { currrency, setCurrency } = CoinState();
-
-  console.log(currrency);
+  const { currency, setCurrency } = CoinState();
+  const { symbol } = CoinState();
+  console.log(currency);
+  console.log(symbol);
 
   return (
     <ThemeProvider theme={darkTheme}>
       <AppBar position="static" color="transparent">
-        <Container>
+        <Container sx={containerStyles}>
           <Toolbar>
             <Typography
               sx={titleStyles}
               onClick={() => navigate("/")}
               variant="h5"
             >
-              Koin Fynder
+              KoinFynder
             </Typography>
             <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
               <Select
                 variant="outlined"
                 sx={selectStyles}
-                value={currrency}
+                value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
               >
                 <MenuItem value={"USD"}>USD</MenuItem>

@@ -1,0 +1,15 @@
+.banner{
+    background-image: url(/banner.jpg);
+    background-size: cover;
+    background-position: center;
+    justify-content: space-around;
+}
+
+.tag-line{
+    display: flex;
+    height: 40%;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+
+}

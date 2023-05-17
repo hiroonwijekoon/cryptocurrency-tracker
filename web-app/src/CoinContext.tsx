@@ -7,10 +7,10 @@ type ContextProps = {
 const Coin = createContext<any>(undefined);
 
 const CoinContext = ({ children }: ContextProps) => {
-  const [currrency, setCurrency] = useState("USD");
+  const [currency, setCurrency] = useState("USD");
   const [symbol, setSymbol] = useState("$");
   useEffect(() => {
-    switch (currrency) {
+    switch (currency) {
       case "USD":
         setSymbol("$");
       case "JPY":
@@ -18,9 +18,9 @@ const CoinContext = ({ children }: ContextProps) => {
       case "LKR":
         setSymbol("Rs");
     }
-  }, [currrency]);
+  }, [currency]);
   return (
-    <Coin.Provider value={{ currrency, symbol, setCurrency }}>
+    <Coin.Provider value={{ currency, symbol, setCurrency }}>
       {children}
     </Coin.Provider>
   );
