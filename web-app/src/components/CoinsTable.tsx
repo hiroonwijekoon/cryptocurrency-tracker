@@ -19,6 +19,7 @@ import {
   createTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { numberWithCommas } from "./Banner/Carousel";
 
 const CoinsTable = () => {
   //setting config for dark theme
@@ -31,6 +32,16 @@ const CoinsTable = () => {
     },
   });
 
+  //styling using sx styles instead of css
+  const rowStyles = {
+    backgroundColor: "#16171a",
+    cursor: "pointer",
+    "&:hover": {
+      backgorundColor: "#131111",
+    },
+    fontFamily: "Montserrat",
+  };
+
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
@@ -39,7 +50,7 @@ const CoinsTable = () => {
   const navigate = useNavigate();
 
   //get selected currency form state
-  const { currency } = CoinState();
+  const { currency, symbol } = CoinState();
 
   //retrieve data from API
   const fetchCoins = async () => {
@@ -106,7 +117,7 @@ const CoinsTable = () => {
                   ))}
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody sx={rowStyles}>
                 {handleSearch().map((row: any) => {
                   let profit = row?.price_change_percentage_24h >= 0;
 
@@ -114,7 +125,62 @@ const CoinsTable = () => {
                     <TableRow
                       onClick={() => navigate(`/coins/${row.id}`)}
                       key={row.name}
-                    ></TableRow>
+                    >
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        style={{
+                          display: "flex",
+                          gap: 15,
+                        }}
+                      >
+                        <img
+                          src={row?.image}
+                          alt={row?.name}
+                          height="50"
+                          style={{ marginBottom: 10 }}
+                        />
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <span
+                            style={{ textTransform: "uppercase", fontSize: 22 }}
+                          >
+                            {row.symbol}
+                          </span>
+                          <span style={{ color: "darkgray" }}>{row.name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell style={{ textAlign: "right", fontSize: 15 }}>
+                        {symbol}{" "}
+                        {numberWithCommas(row.current_price.toFixed(2))}
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          textAlign: "right",
+                          color: profit ? "rgb(14,203,129)" : "red",
+                          fontWeight: 500,
+                          fontSize: 15,
+                        }}
+                      >
+                        {profit && "+"}
+                        {row.price_change_percentage_24h.toFixed(2)}%
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          textAlign: "right",
+                          color: profit ? "rgb(14,203,129)" : "red",
+                          fontWeight: 500,
+                          fontSize: 15,
+                        }}
+                      >
+                        {symbol}{" "}
+                        {numberWithCommas(
+                          row.market_cap.toString().slice(0, -6)
+                        )}
+                        M
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
               </TableBody>
