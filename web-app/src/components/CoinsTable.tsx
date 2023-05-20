@@ -6,6 +6,7 @@ import {
   Box,
   Container,
   LinearProgress,
+  Pagination,
   Paper,
   Table,
   TableBody,
@@ -45,6 +46,9 @@ const CoinsTable = () => {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+
+  //using state for pagination
+  const [page, setPage] = useState(1);
 
   //need this useNavigate function to navigate between pages
   const navigate = useNavigate();
@@ -118,75 +122,99 @@ const CoinsTable = () => {
                 </TableRow>
               </TableHead>
               <TableBody sx={rowStyles}>
-                {handleSearch().map((row: any) => {
-                  let profit = row?.price_change_percentage_24h >= 0;
+                {handleSearch()
+                  .slice((page - 1) * 10, (page - 1) * 10 + 10)
+                  .map((row: any) => {
+                    let profit = row?.price_change_percentage_24h >= 0;
 
-                  return (
-                    <TableRow
-                      onClick={() => navigate(`/coins/${row.id}`)}
-                      key={row.name}
-                    >
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        style={{
-                          display: "flex",
-                          gap: 15,
-                        }}
+                    return (
+                      <TableRow
+                        onClick={() => navigate(`/coins/${row.id}`)}
+                        key={row.name}
                       >
-                        <img
-                          src={row?.image}
-                          alt={row?.name}
-                          height="50"
-                          style={{ marginBottom: 10 }}
-                        />
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          style={{
+                            display: "flex",
+                            gap: 15,
+                          }}
                         >
-                          <span
-                            style={{ textTransform: "uppercase", fontSize: 22 }}
+                          <img
+                            src={row?.image}
+                            alt={row?.name}
+                            height="50"
+                            style={{ marginBottom: 10 }}
+                          />
+                          <div
+                            style={{ display: "flex", flexDirection: "column" }}
                           >
-                            {row.symbol}
-                          </span>
-                          <span style={{ color: "darkgray" }}>{row.name}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell style={{ textAlign: "right", fontSize: 15 }}>
-                        {symbol}{" "}
-                        {numberWithCommas(row.current_price.toFixed(2))}
-                      </TableCell>
-                      <TableCell
-                        style={{
-                          textAlign: "right",
-                          color: profit ? "rgb(14,203,129)" : "red",
-                          fontWeight: 500,
-                          fontSize: 15,
-                        }}
-                      >
-                        {profit && "+"}
-                        {row.price_change_percentage_24h.toFixed(2)}%
-                      </TableCell>
-                      <TableCell
-                        style={{
-                          textAlign: "right",
-                          color: profit ? "rgb(14,203,129)" : "red",
-                          fontWeight: 500,
-                          fontSize: 15,
-                        }}
-                      >
-                        {symbol}{" "}
-                        {numberWithCommas(
-                          row.market_cap.toString().slice(0, -6)
-                        )}
-                        M
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                            <span
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: 22,
+                              }}
+                            >
+                              {row.symbol}
+                            </span>
+                            <span style={{ color: "darkgray" }}>
+                              {row.name}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell style={{ textAlign: "right", fontSize: 15 }}>
+                          {symbol}{" "}
+                          {numberWithCommas(row.current_price.toFixed(2))}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            textAlign: "right",
+                            color: profit ? "rgb(14,203,129)" : "red",
+                            fontWeight: 500,
+                            fontSize: 15,
+                          }}
+                        >
+                          {profit && "+"}
+                          {row.price_change_percentage_24h.toFixed(2)}%
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            textAlign: "right",
+                            color: profit ? "rgb(14,203,129)" : "red",
+                            fontWeight: 500,
+                            fontSize: 15,
+                          }}
+                        >
+                          {symbol}{" "}
+                          {numberWithCommas(
+                            row.market_cap.toString().slice(0, -6)
+                          )}
+                          M
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
           )}
         </TableContainer>
+        <Pagination
+          count={parseInt((handleSearch()?.length / 10).toString())}
+          variant="outlined"
+          shape="rounded"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            marginTop: "20px",
+            paddingBottom: "50px",
+          }}
+          onChange={(_, value) => {
+            setPage(value);
+            window.scroll(0, 450);
+          }}
+        />
       </Container>
     </ThemeProvider>
   );
